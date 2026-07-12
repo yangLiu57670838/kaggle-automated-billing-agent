@@ -1,8 +1,10 @@
-from langchain_openai import ChatOpenAI
-from langchain.agents import initialize_agent
+from langchain.agents import create_agent
+from langchain_core.messages import HumanMessage
 from langchain_core.tools import Tool
+from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
+from src.agent.prompts import SYSTEM_PROMPT
 from src.tools import apply_discount, calculate_final_total, calculate_subtotal
 
 
@@ -42,15 +44,27 @@ tools = [
     ),
 ]
 
-llm = ChatOpenAI(
-    model="gpt-4o-mini",  # use small but paid model for this simple task agent
-    temperature=0,  # this agent is for reading email and calculate billing and discount, so no need to be too creative
-)
-agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True)
+# use small but paid model 'gpt-4o-mini' for this simple task agent
+# temperature 0: this agent is for reading email and calculate billing and discount, so no need to be too creative
+def build_agent(*, model: str = "gpt-4o-mini", temperature: float = 0, debug: bool = False):
+    llm = ChatOpenAI(model=model, temperature=temperature)
+    return create_agent(
+        model=llm,
+        tools=tools,
+        system_prompt=SYSTEM_PROMPT,
+        debug=debug,
+    )
 
-print(
-    agent.run(
+
+def run_billing_agent(email_text: str, *, agent=None) -> str:
+    billing_agent = agent or build_agent()
+    result = billing_agent.invoke({"messages": [HumanMessage(content=email_text)]})
+    return result["messages"][-1].content
+
+
+if __name__ == "__main__":
+    sample_email = (
         "Hello, we would like to order 50 office chairs. The agreed price is 120 dollars per chair. "
         "We are eligible for the 15 percent bulk discount. Please include the 250 dollar delivery fee."
     )
-)
+    print(run_billing_agent(sample_email, agent=build_agent(debug=True)))

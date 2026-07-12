@@ -4,7 +4,8 @@
 **Version:** 1.0  
 **Date:** 2026-07-07  
 **Author:** You  
-**Status:** Draft
+**Status:** Draft  
+**Tracking:** [TODO.md](TODO.md) — active implementation tasks linked to this PRD
 
 ---
 
@@ -160,6 +161,7 @@ Emails vary in phrasing. The agent must handle patterns like:
 ```
 kaggle-automated-billing-agent/
 ├── PRD.md                          ← This document
+├── TODO.md                         ← Active tasks; linked to PRD phases & risks
 ├── README.md                       ← Setup, run instructions, competition link
 ├── requirements.txt                ← Python dependencies
 ├── .env.example                    ← API keys template (OPENAI_API_KEY, etc.)
@@ -344,6 +346,8 @@ kaggle-automated-billing-agent/
 ---
 
 ## 15. Definition of Done
+
+See [TODO.md](TODO.md) for in-progress work items.
 
 - [ ] Three tools implemented and unit-tested
 - [ ] ReAct agent processes an email end-to-end using only tools for math
