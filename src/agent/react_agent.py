@@ -1,10 +1,11 @@
 from langchain.agents import create_agent
 from langchain_core.messages import HumanMessage
-from langchain_core.tools import Tool
+from langchain_core.tools import StructuredTool
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
 from src.agent.prompts import SYSTEM_PROMPT
+from src.config import load_env
 from src.tools import apply_discount, calculate_final_total, calculate_subtotal
 
 
@@ -24,21 +25,21 @@ class CalculateFinalTotalInput(BaseModel):
 
 
 tools = [
-    Tool(
-        name="calculate_subtotal",
+    StructuredTool.from_function(
         func=calculate_subtotal,
+        name="calculate_subtotal",
         description="Calculate subtotal as quantity × unit_price. Call this first.",
         args_schema=CalculateSubtotalInput,
     ),
-    Tool(
-        name="apply_discount",
+    StructuredTool.from_function(
         func=apply_discount,
+        name="apply_discount",
         description="Apply discount: subtotal × (1 - discount_percent / 100). Call second.",
         args_schema=ApplyDiscountInput,
     ),
-    Tool(
-        name="calculate_final_total",
+    StructuredTool.from_function(
         func=calculate_final_total,
+        name="calculate_final_total",
         description="Add shipping fee to discounted amount. Call third to get Total_Bill.",
         args_schema=CalculateFinalTotalInput,
     ),
@@ -63,6 +64,7 @@ def run_billing_agent(email_text: str, *, agent=None) -> str:
 
 
 if __name__ == "__main__":
+    load_env()
     sample_email = (
         "Hello, we would like to order 50 office chairs. The agreed price is 120 dollars per chair. "
         "We are eligible for the 15 percent bulk discount. Please include the 250 dollar delivery fee."
