@@ -202,7 +202,8 @@ kaggle-automated-billing-agent/
 │       └── sample_orders.json      ← Test cases with expected totals
 │
 ├── notebooks/
-│   └── 01_explore_and_prototype.ipynb  ← EDA, prompt tuning, debugging
+│   ├── 01_explore_and_prototype.ipynb      ← EDA, prompt tuning, debugging
+│   └── 02_kaggle_submission_record.ipynb   ← Single notebook for Kaggle record after final result
 │
 └── outputs/
     └── .gitkeep                    ← submission.csv written here
@@ -265,6 +266,19 @@ kaggle-automated-billing-agent/
 - [ ] Tune prompts for edge phrasings ("0% discount", "flat freight", etc.)
 - [ ] Add retry logic for malformed agent outputs
 - [ ] Consider fallback regex extractor if LLM misses a field
+
+### Phase 6 — Kaggle Notebook Record (After Final Result)
+**Files:** `notebooks/02_kaggle_submission_record.ipynb`
+
+After you have a final `submission.csv` and leaderboard score, create **one** Kaggle notebook as the competition / portfolio record (not for day-to-day development).
+
+- [ ] Create a single notebook that documents the end-to-end solution
+- [ ] Include: problem summary, ReAct agent + three tools, how `Total_Bill` is computed, how `submission.csv` is produced
+- [ ] Prefer importing / calling project code (`src/`) rather than re-implementing logic in the notebook
+- [ ] Optionally re-run inference and write `submission.csv` from the notebook for reproducibility
+- [ ] Publish / upload the notebook on Kaggle as the official run record
+
+**Exit criteria:** One public (or competition-attached) Kaggle notebook that reproduces the final submission approach.
 
 ---
 
@@ -354,3 +368,4 @@ See [TODO.md](TODO.md) for in-progress work items.
 - [ ] `submission.csv` generated for full `test.csv`
 - [ ] Submitted to Kaggle with a competitive RMSE
 - [ ] README documents how to reproduce locally
+- [ ] Single Kaggle notebook created/published as a record after the final result (Phase 6)
