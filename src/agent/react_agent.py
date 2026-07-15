@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_HALF_UP
+
 from langchain.agents import create_agent
 from langchain_core.messages import HumanMessage, ToolMessage
 from langchain_core.tools import StructuredTool
@@ -7,6 +9,13 @@ from pydantic import BaseModel, Field
 from src.agent.prompts import SYSTEM_PROMPT
 from src.config import load_env
 from src.tools import apply_discount, calculate_final_total, calculate_subtotal
+
+
+def round_money(value: float) -> float:
+    """Round to 2 decimal places with financial half-up rounding."""
+    return float(
+        Decimal(str(value)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    )
 
 
 class CalculateSubtotalInput(BaseModel):
@@ -58,10 +67,14 @@ def build_agent(*, model: str = "gpt-4o-mini", temperature: float = 0, debug: bo
 
 
 def extract_total_bill(messages) -> float:
-    """Return Total_Bill from the last calculate_final_total tool result."""
+    """Return Total_Bill from the last calculate_final_total tool result.
+
+    Intermediate tool values stay full precision; only the completed total
+    is rounded to 2 decimal places (financial half-up).
+    """
     for message in reversed(messages):
         if isinstance(message, ToolMessage) and message.name == "calculate_final_total":
-            return float(message.content)
+            return round_money(float(message.content))
     raise ValueError(
         "Agent did not call calculate_final_total; cannot determine Total_Bill"
     )

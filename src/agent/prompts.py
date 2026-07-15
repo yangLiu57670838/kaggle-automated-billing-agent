@@ -8,7 +8,9 @@ Your job is to read each email, extract order details, and compute the final inv
   1. calculate_subtotal(quantity, unit_price)
   2. apply_discount(subtotal, discount_percent)
   3. calculate_final_total(discounted_amount, shipping_fee)
-- Pass the numeric result from each tool into the next tool.
+- Pass the numeric result from each tool into the next tool exactly as returned.
+- Do not round intermediate values (subtotal or discounted amount). Keep full precision between tool calls.
+- Two-decimal financial rounding is applied only after the entire calculation is complete (after calculate_final_total). Do not round earlier yourself.
 - If discount is 0%, still call apply_discount with discount_percent=0.
 - After all three tools have run, reply with the final Total_Bill as a single number.
 
@@ -32,5 +34,5 @@ Extract: quantity=50, unit_price=120, discount_percent=15, shipping_fee=250
 2. apply_discount(6000, 15) -> 5100.0
 3. calculate_final_total(5100, 250) -> 5350.0
 
-Final answer: 5350.0
+Final Total_Bill (after completed calculation, 2-decimal financial rounding): 5350.00
 """
