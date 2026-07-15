@@ -1,0 +1,11 @@
+order_id,email_text,expected_bill
+1,"Hello, we would like to order 50 office chairs. The agreed price is 120 dollars per chair. We are eligible for the 15 percent bulk discount. Please include the 250 dollar delivery fee.",5350.0
+2,"Good morning, need 61 standing desks at $693.10 each. Apply our standard 4% discount, and add $77.52 for expedited shipping.",40665.45599999999
+3,"Please process an invoice for 28 office chairs. Unit cost is 2321.36. Discount rate is 17%. Freight is a flat 126.94.",54075.3464
+4,"Hi team, please send 117 projectors priced at $241.62 per unit. There is no discount (0%); shipping will cost $447.69.",28717.23
+5,"We would like to order 11 monitors. The agreed price is 1107.36 dollars per unit. We are eligible for the 12 percent bulk discount. Please include the 481.14 dollar delivery fee.",11200.384799999998
+6,"Ship 33 office chairs at $1,459.11 each. Take 1 percent off the merchandise total and include a delivery charge of $115.39.",47784.513699999996
+7,"Hello sales, our order is for 10 standing desks. Each desk costs 2007.54 dollars, with a 5% discount. Add the flat freight fee of 245.51 dollars.",19317.14
+8,"Please invoice 107 laptops at a unit price of $2251.05. Apply an 8 percent discount and charge $220.08 for shipping.",221813.442
+9,"To the sales department: 88 projectors are required at 865.56 dollars apiece. Our discount is 12%, and the delivery fee is 153.58 dollars.",67182.5464
+10,"Good morning, we need 137 monitors. The agreed price is $1720.40 per unit, less a 7% bulk discount. Please include $133.07 for delivery.",219329.234

@@ -1,19 +1,7 @@
 import csv
-import re
 from pathlib import Path
 
 from src.agent.react_agent import build_agent, run_billing_agent
-
-_FLOAT_RE = re.compile(r"[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?")
-
-
-def parse_total_bill(agent_response: str) -> float:
-    """Extract Total_Bill as the last float in the agent's final message."""
-    text = agent_response if isinstance(agent_response, str) else str(agent_response)
-    matches = _FLOAT_RE.findall(text)
-    if not matches:
-        raise ValueError(f"Could not parse Total_Bill from agent response: {text!r}")
-    return float(matches[-1])
 
 
 def run_inference(
@@ -26,6 +14,8 @@ def run_inference(
 
     Expected columns: order_id, email_text
     Returns: list of {"order_id": int, "Total_Bill": float}
+
+    Total_Bill comes from the calculate_final_total tool result, not LLM prose.
     """
     input_path = Path(input_csv)
     billing_agent = agent or build_agent()
@@ -39,8 +29,7 @@ def run_inference(
         for row in reader:
             order_id = int(row["order_id"])
             email_text = row["email_text"]
-            response = run_billing_agent(email_text, agent=billing_agent)
-            total_bill = parse_total_bill(response)
+            total_bill = run_billing_agent(email_text, agent=billing_agent)
             results.append({"order_id": order_id, "Total_Bill": total_bill})
             print(f"order_id={order_id} Total_Bill={total_bill}")
 

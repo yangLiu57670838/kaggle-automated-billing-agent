@@ -1,5 +1,5 @@
 from langchain.agents import create_agent
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, ToolMessage
 from langchain_core.tools import StructuredTool
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
@@ -57,10 +57,20 @@ def build_agent(*, model: str = "gpt-4o-mini", temperature: float = 0, debug: bo
     )
 
 
-def run_billing_agent(email_text: str, *, agent=None) -> str:
+def extract_total_bill(messages) -> float:
+    """Return Total_Bill from the last calculate_final_total tool result."""
+    for message in reversed(messages):
+        if isinstance(message, ToolMessage) and message.name == "calculate_final_total":
+            return float(message.content)
+    raise ValueError(
+        "Agent did not call calculate_final_total; cannot determine Total_Bill"
+    )
+
+
+def run_billing_agent(email_text: str, *, agent=None) -> float:
     billing_agent = agent or build_agent()
     result = billing_agent.invoke({"messages": [HumanMessage(content=email_text)]})
-    return result["messages"][-1].content
+    return extract_total_bill(result["messages"])
 
 
 if __name__ == "__main__":

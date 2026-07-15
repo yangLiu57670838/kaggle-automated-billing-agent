@@ -16,5 +16,10 @@ pytest tests/test_tools.py -v <br />
 source venv/bin/activate <br />
 python scripts/generate_submission.py <br />
 
+### local evaluation on labeled sample_train.csv (PRD Phase 3)
+source venv/bin/activate <br />
+python scripts/run_local_test.py <br />
+python scripts/evaluate_rmse.py <br />
+
 ### everytime update packages in local
 pip3 freeze > requirements.txt
